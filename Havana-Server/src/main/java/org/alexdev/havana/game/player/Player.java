@@ -72,6 +72,7 @@ public class Player extends Entity {
     private boolean processLoginSteps;
     private List<Group> joinedGroups;
     private String lastGift;
+    private boolean flashClient;
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
@@ -618,5 +619,13 @@ public class Player extends Entity {
 
     public String getLastGift() {
         return lastGift;
+    }
+
+    public boolean isFlashClient() {
+        return flashClient;
+    }
+
+    public void setFlashClient(boolean flashClient) {
+        this.flashClient = flashClient;
     }
 }

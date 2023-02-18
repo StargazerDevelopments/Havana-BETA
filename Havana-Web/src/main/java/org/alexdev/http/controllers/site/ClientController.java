@@ -130,6 +130,114 @@ public class ClientController {
         template.render();
     }
 
+    public static void betaClient(WebConnection webConnection) throws SQLException {
+        XSSUtil.clear(webConnection);
+
+        if (!webConnection.session().getBoolean("authenticated")) {
+            webConnection.redirect("/login_popup");
+            return;
+        }
+
+        webConnection.session().set("clientRequest", webConnection.request().uri());
+
+        if (webConnection.session().getBoolean("clientAuthenticate")) {
+            webConnection.redirect("/account/reauthenticate");
+            return;
+        }
+
+        boolean forwardRoom = false;
+        int forwardType = -1;
+        int forwardId = -1;
+
+        var template = webConnection.template("client_beta");
+        PlayerDetails playerDetails = (PlayerDetails) template.get("playerDetails");
+
+        if (playerDetails == null) {
+            SessionUtil.logout(webConnection);
+            webConnection.redirect("/");
+            return;
+        }
+
+        var pair = playerDetails.isBanned();
+
+        if (pair != null) {
+            webConnection.redirect("/account/banned");
+            return;
+        }
+
+        if (webConnection.get().contains("createRoom") && StringUtils.isNumeric(webConnection.get().getString("createRoom"))) {
+            int roomType = Integer.parseInt(webConnection.get().getString("createRoom"));
+            boolean setGift = false;
+
+            if (!playerDetails.canSelectRoom()) {
+                int roomLayout = (int) PlayerStatisticsDao.getStatisticLong(playerDetails.getId(), PlayerStatistic.NEWBIE_ROOM_LAYOUT);
+
+                if (roomLayout == 0) {
+                    if (!(roomType < 0 || roomType > 5)) {
+                        setGift = true;
+                    }
+                }
+            } else {
+                setGift = RoomSelectionHandler.selectRoom(playerDetails.getId(), roomType);
+            }
+
+            if (setGift) {
+                PlayerStatisticsDao.updateStatistic(playerDetails.getId(), PlayerStatistic.NEWBIE_ROOM_LAYOUT, roomType + 1);
+                PlayerStatisticsDao.updateStatistic(playerDetails.getId(), PlayerStatistic.NEWBIE_GIFT, 1);
+                PlayerStatisticsDao.updateStatistic(playerDetails.getId(), PlayerStatistic.NEWBIE_GIFT_TIME, DateUtil.getCurrentTimeSeconds() + TimeUnit.DAYS.toSeconds(1));
+            }
+
+            playerDetails = PlayerDao.getDetails(webConnection.session().getInt("user.id"));
+            forwardRoom = true;
+
+            forwardType = 2; // Private room
+            forwardId = playerDetails.getSelectedRoomId();
+        }
+
+        if (webConnection.get().contains("forwardId")) {
+            forwardRoom = true;
+            try {
+                forwardId = webConnection.get().getInt("roomId");
+                forwardType = webConnection.get().getInt("forwardId");
+            } catch (Exception ex) {
+
+            }
+        }
+
+        if (webConnection.get().contains("shortcut")) {
+            int redirectionId = 0;
+
+            if (webConnection.get().getString("shortcut").equals("roomomatic")) {
+                redirectionId = 1;
+            }
+
+            if (redirectionId > 0) {
+                template.set("shortcut", "shortcut.id=" + redirectionId + ";");
+            }
+        }
+
+        var ssoTicket = playerDetails.getSsoTicket();
+
+        // Update sso ticket
+        if (GameConfiguration.getInstance().getBoolean("reset.sso.after.login") || ssoTicket == null || ssoTicket.isBlank()) {
+            ssoTicket = UUID.randomUUID().toString();
+            PlayerDao.setTicket(webConnection.session().getInt("user.id"), ssoTicket);
+        }
+
+        template.set("ssoTicket", ssoTicket);
+        template.set("forwardRoom", forwardRoom);
+
+        if (forwardRoom) {
+            template.set("forward", "<param name=\"sw9\" value=\"forward.type=" + forwardType + ";forward.id=" + forwardId + ";processlog.url=\">");
+            template.set("forwardSub", "sw9=\"forward.type=" + forwardType + ";forward.id=" + forwardId + ";processlog.url=\"");
+
+            template.set("forwardScript", "<param name=\\\"sw9\\\" value=\\\"forward.type=" + forwardType + ";forward.id=" + forwardId + ";processlog.url=\\\">");
+            template.set("forwardSubScript", "sw9=\\\"forward.type=" + forwardType + ";forward.id=" + forwardId + ";processlog.url=\\\"");
+        }
+
+        template.render();
+    }
+
     public static void clientInstallShockwave(WebConnection webConnection) {
         XSSUtil.clear(webConnection);
 

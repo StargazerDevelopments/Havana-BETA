@@ -247,6 +247,8 @@ public class MessageHandler {
         registerEvent(18, new GETFVRF());
         registerEvent(19, new ADD_FAVORITE_ROOM());
         registerEvent(20, new DEL_FAVORITE_ROOM());
+        // New navigator Flash
+        registerEvent(434, new SUSERF());
     }
 
     /**
@@ -266,6 +268,9 @@ public class MessageHandler {
         registerEvent(63, new G_ITEMS());
         registerEvent(98, new LETUSERIN());
         registerEvent(261, new RATEFLAT());
+        // New room entry Flash
+        registerEvent(391, new TRYFLAT());
+        registerEvent(390, new GetRoomEntryData());
     }
 
     /**

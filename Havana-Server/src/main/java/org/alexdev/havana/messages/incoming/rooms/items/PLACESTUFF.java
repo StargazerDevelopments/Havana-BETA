@@ -177,5 +177,7 @@ public class PLACESTUFF implements MessageEvent {
 
         player.getInventory().getItems().remove(item);
         player.getRoomUser().getTimerManager().resetRoomTimer();
+
+        player.getInventory().getView("new");
     }
 }

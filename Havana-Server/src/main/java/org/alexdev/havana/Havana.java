@@ -54,6 +54,7 @@ public class Havana {
 
     private static String serverIP;
     private static int serverPort;
+    private static int serverPortFlash;
 
     private static String musServerIP;
     private static int musServerPort;
@@ -64,6 +65,7 @@ public class Havana {
     private static boolean isShutdown;
     
     private static NettyServer server;
+    private static NettyServer serverFlash;
     private static MusServer musServer;
     private static RconServer rconServer;
 
@@ -181,6 +183,16 @@ public class Havana {
         server = new NettyServer(serverIP, serverPort);
         server.createSocket();
         server.bind();
+
+        serverPortFlash = ServerConfiguration.getInteger("server.port.flash");
+
+        if (serverPortFlash != 0) {
+            serverFlash = new NettyServer(serverIP, serverPortFlash);
+            serverFlash.createSocket();
+            serverFlash.bind();
+        } else {
+            log.warn("Flash port not provided, Havana BETA not working!");
+        }
     }
 
     private static void setupRcon() throws IOException {

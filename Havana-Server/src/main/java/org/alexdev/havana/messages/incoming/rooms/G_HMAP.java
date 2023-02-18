@@ -28,6 +28,9 @@ public class G_HMAP implements MessageEvent {
             player.send(new HEIGHTMAP(game.getMap().getHeightMap()));
         } else {
             player.send(new HEIGHTMAP(player.getRoomUser().getRoom().getModel()));
+            if (player.isFlashClient()) {
+                player.send(new FLOOR_MAP(player.getRoomUser().getRoom().getModel()));
+            }
         }
 
         if (gamePlayer != null) {
@@ -37,8 +40,6 @@ public class G_HMAP implements MessageEvent {
                 SnowStormGame game = (SnowStormGame) gamePlayer.getGame();
                 player.send(new OBJECTS_WORLD(game.getMap().getCompiledItems()));
             }
-
-            return;
         }
     }
 }

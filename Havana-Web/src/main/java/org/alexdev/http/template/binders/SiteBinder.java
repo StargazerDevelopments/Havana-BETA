@@ -80,7 +80,7 @@ public class SiteBinder implements TemplateBinder {
 
         this.loaderFlashBetaBase = GameConfiguration.getInstance().getString("loader.flash.beta.base");
         this.loaderFlashBetaSwf = GameConfiguration.getInstance().getString("loader.flash.beta.swf");
-        this.loaderFlashBetaTexts = GameConfiguration.getInstance().getString("loader.flash.beta.external.texts");
+        this.loaderFlashBetaTexts = GameConfiguration.getInstance().getString("loader.flash.beta.external.flash.texts");
         this.loaderFlashBetaVariables = GameConfiguration.getInstance().getString("loader.flash.beta.external.variables");
 
         this.serverOnline = Watchdog.IS_SERVER_ONLINE;

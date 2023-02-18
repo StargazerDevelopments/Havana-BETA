@@ -28,6 +28,10 @@ public class WebSettingsConfigWriter implements ConfigWriter {
         config.put("loader.dcr", "http://localhost/dcr/v31/habbo.dcr?");
         config.put("loader.external.variables", "http://localhost/dcr/v31/gamedata/external_variables.txt?");
         config.put("loader.external.texts", "http://localhost/dcr/v31/gamedata/external_texts.txt?");
+        config.put("loader.flash.beta.base", "http://localhost/dcr/r35/");
+        config.put("loader.flash.beta.swf", "http://localhost/dcr/r35/Habbo.swf");
+        config.put("loader.flash.beta.external.variables", "http://localhost/dcr/r35/gamedata/external_variables.txt?");
+        config.put("loader.flash.beta.external.flash.texts", "http://localhost/dcr/r35/gamedata/external_flash_texts.txt");
 
         config.put("registration.disabled", "false");
         config.put("collectables.page", "51");

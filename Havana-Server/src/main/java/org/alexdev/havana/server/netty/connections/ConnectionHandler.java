@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest> {
     final private static Logger log = LoggerFactory.getLogger(ConnectionHandler.class);
@@ -53,6 +54,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
         }
 
         Player player = new Player(new NettyPlayerNetwork(ctx.channel(), this.server.getConnectionIds().getAndIncrement()));
+        player.setFlashClient(Objects.equals(ctx.channel().localAddress().toString().split(":")[1], "12320"));
         ctx.channel().attr(Player.PLAYER_KEY).set(player);
 
         if (!this.server.getChannels().add(ctx.channel()) || Havana.isShuttingdown()) {
@@ -60,7 +62,9 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
             return;
         }
 
-        player.send(new HELLO());
+        if (!player.isFlashClient()) {
+            player.send(new HELLO()); // TODO: Check if this is still needed for Flash
+        }
 
         if (ServerConfiguration.getBoolean("log.connections")) {
             log.info("[{}] Connection from {} ", player.getNetwork().getConnectionId(), NettyPlayerNetwork.getIpAddress(ctx.channel()));

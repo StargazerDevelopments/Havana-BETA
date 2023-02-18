@@ -5,6 +5,7 @@ import org.alexdev.havana.game.item.Item;
 import org.alexdev.havana.game.item.base.ItemBehaviour;
 import org.alexdev.havana.game.player.Player;
 import org.alexdev.havana.messages.outgoing.inventory.INVENTORY;
+import org.alexdev.havana.messages.types.MessageComposer;
 import org.alexdev.havana.server.netty.streams.NettyResponse;
 import org.alexdev.havana.util.StringUtil;
 
@@ -91,8 +92,22 @@ public class Inventory {
         this.changeView(stripView);
 
         Map<Integer, Item> casts = this.getCasts();
+
         this.player.send(new INVENTORY(this, casts));
 
+        if (stripView.equals("new") && player.isFlashClient()) {
+            this.player.send(new MessageComposer() {
+                @Override
+                public void compose(NettyResponse response) {
+
+                }
+
+                @Override
+                public short getHeader() {
+                    return 101;
+                }
+            });
+        }
     }
 
     /**

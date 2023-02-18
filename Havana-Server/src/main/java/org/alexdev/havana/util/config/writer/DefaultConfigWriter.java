@@ -11,6 +11,7 @@ public class DefaultConfigWriter implements ConfigWriter {
         // DEFAULT settings
         config.put("server.bind", "127.0.0.1");
         config.put("server.port", "12321");
+        config.put("server.port.flash", "12320");
 
         config.put("server.limit.bandwidth", "false");//String.valueOf(40*1024));
         config.put("server.limit.bandwidth.amount", String.valueOf(40*1024));
@@ -23,13 +24,13 @@ public class DefaultConfigWriter implements ConfigWriter {
 
         config.put("log.connections", "true");
         config.put("log.sent.packets", "false");
-        config.put("log.received.packets", "false");
+        config.put("log.received.packets", "true");
 
         config.put("mysql.hostname", "127.0.0.1");
         config.put("mysql.port", "3306");
-        config.put("mysql.username", "havana");
-        config.put("mysql.password", "verysecret");
-        config.put("mysql.database", "havana");
+        config.put("mysql.username", "root");
+        config.put("mysql.password", "123");
+        config.put("mysql.database", "havana_db");
 
         config.put("debug", "false");
         return config;

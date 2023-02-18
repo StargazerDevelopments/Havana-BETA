@@ -8,9 +8,7 @@ import org.alexdev.havana.game.room.Room;
 import org.alexdev.havana.game.room.RoomManager;
 import org.alexdev.havana.messages.outgoing.alerts.LOCALISED_ERROR;
 import org.alexdev.havana.messages.outgoing.navigator.CANTCONNECT;
-import org.alexdev.havana.messages.outgoing.rooms.DOORBELL_WAIT;
-import org.alexdev.havana.messages.outgoing.rooms.FLATNOTALLOWEDTOENTER;
-import org.alexdev.havana.messages.outgoing.rooms.FLAT_LETIN;
+import org.alexdev.havana.messages.outgoing.rooms.*;
 import org.alexdev.havana.messages.types.MessageEvent;
 import org.alexdev.havana.server.netty.streams.NettyRequest;
 
@@ -31,7 +29,7 @@ public class TRYFLAT implements MessageEvent {
         }
 
         if (room == null) {
-                return;
+            return;
 
         }
 
@@ -57,7 +55,7 @@ public class TRYFLAT implements MessageEvent {
                 return;
             }
 
-            if (player.getRoomUser().getAuthenticateId() != roomId){
+            if (player.getRoomUser().getAuthenticateId() != roomId) {
                 if (room.getData().getAccessTypeId() == 1 && !room.hasRights(player.getDetails().getId(), false) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
                     if (rangDoorbell(room, player)) {
                         player.send(new DOORBELL_WAIT());
@@ -78,6 +76,12 @@ public class TRYFLAT implements MessageEvent {
         }
 
         player.getRoomUser().setAuthenticateId(roomId);
+
+        if (player.isFlashClient()) {
+            player.send(new OPEN_CONNECTION());
+//            player.send(new ROOM_READY(roomId, room.getData().getModel()));
+        }
+
         player.send(new FLAT_LETIN());
     }
 

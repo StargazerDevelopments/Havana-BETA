@@ -20,12 +20,15 @@ public class INIT_CRYPTO implements MessageEvent {
         //String prime = Util.getRSA().sign(dh.getPrime().toString());
         //String generator = Util.getRSA().sign(dh.getGenerator().toString());
 
-        //player.sendObject("DAQBHIIIKHJIPAIQAdd-MM-yyyy\u0002SAHPB/client\u0002QBHIJWVVVSNKQCFUBJASMSLKUUOJCOLJQPNSBIRSVQBRXZQOTGPMNJIHLVJCRRULBLUO" + (char)1);
+        if (player.isFlashClient()) {
+            // TODO: Make Flash encryption bypassable so this stupid string doesn't have to be sent anymore...
+            player.sendObject("DAQBHIIIKHJIPAIQAdd-MM-yyyy\u0002SAHPB/client\u0002QBHIJWVVVSNKQCFUBJASMSLKUUOJCOLJQPNSBIRSVQBRXZQOTGPMNJIHLVJCRRULBLUO" + (char)1);
+        } else {
+            player.send(new CRYPTO_PARAMETERS());
 
-        player.send(new CRYPTO_PARAMETERS());
-
-        // Try again
-        this.retrySend(player);
+            // Try again
+            this.retrySend(player);
+        }
     }
 
     /**

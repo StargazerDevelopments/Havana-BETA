@@ -1,8 +1,11 @@
 package org.alexdev.havana.server.netty.codec;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.util.CharsetUtil;
 import org.alexdev.havana.game.player.Player;
 import org.alexdev.havana.server.netty.streams.NettyRequest;
 import org.alexdev.havana.util.encoding.Base64Encoding;
@@ -13,6 +16,16 @@ public class NetworkDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+        if (buffer.getByte(0) == 60) {
+            ChannelFuture f = ctx.writeAndFlush("<?xml version=\"1.0\"?>\n" +
+                    "  <!DOCTYPE cross-domain-policy SYSTEM \"/xml/dtds/cross-domain-policy.dtd\">\n" +
+                    "  <cross-domain-policy>\n" +
+                    "  <allow-access-from domain=\"*\" to-ports=\"1-31111\" />\n" +
+                    "  </cross-domain-policy>" + (char) 0);
+
+            f.channel().close();
+        }
+
         if (buffer.readableBytes() < 5) {
             // If the incoming data is less than 5 bytes, it's junk.
             return;
