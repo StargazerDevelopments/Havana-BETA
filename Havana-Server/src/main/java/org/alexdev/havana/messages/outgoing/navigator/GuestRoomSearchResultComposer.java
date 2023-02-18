@@ -12,19 +12,16 @@ public class GuestRoomSearchResultComposer extends MessageComposer {
     private final Player player;
     private final int tab;
     private final String search;
-    private final int history;
 
-    public GuestRoomSearchResultComposer(List<Room> roomList, Player player, int tab, String search, int history) {
+    public GuestRoomSearchResultComposer(List<Room> roomList, Player player, int tab, String search) {
         this.roomList = roomList;
         this.player = player;
         this.tab = tab;
         this.search = search;
-        this.history = history;
     }
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeInt(history);
         response.writeInt(tab);
         response.writeString(search);
         response.writeInt(roomList.size());

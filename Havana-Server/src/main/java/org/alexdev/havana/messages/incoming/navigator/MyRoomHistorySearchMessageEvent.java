@@ -12,7 +12,7 @@ import java.util.List;
 public class MyRoomHistorySearchMessageEvent implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        List<Room> roomList = RoomManager.getInstance().getRoomsByMode(7, player);
-        player.send(new GuestRoomSearchResultComposer(roomList, player, 7, "", reader.readInt()));
+//        List<Room> roomList = RoomManager.getInstance().getRoomsByMode(7, player);
+//        player.send(new GuestRoomSearchResultComposer(roomList, player, 7, "", reader.readInt()));
     }
 }

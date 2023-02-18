@@ -16,8 +16,8 @@ public class GETFVRF implements MessageEvent {
     public void handle(Player player, NettyRequest reader) throws Exception {
 
         if (player.isFlashClient()) {
-            List<Room> favouriteRooms = RoomManager.getInstance().getRoomsByMode(6, player);
-            player.send(new GuestRoomSearchResultComposer(favouriteRooms, player, 6, "", reader.readInt()));
+//            List<Room> favouriteRooms = RoomManager.getInstance().getRoomsByMode(6, player);
+//            player.send(new GuestRoomSearchResultComposer(favouriteRooms, player, 6, "", reader.readInt()));
         } else {
             List<Room> favouriteRooms = RoomManager.getInstance().getFavouriteRooms(player.getDetails().getId(), false);
             List<Room> favouritePublicRooms = favouriteRooms.stream().filter(Room::isPublicRoom).collect(Collectors.toList());

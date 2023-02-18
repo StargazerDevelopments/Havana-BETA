@@ -18,7 +18,7 @@ public class SUSERF implements MessageEvent {
 
         if (player.isFlashClient()) {
             List<Room> roomList = RoomManager.getInstance().getRoomsByMode(5, player);
-            player.send(new GuestRoomSearchResultComposer(roomList, player, 5, "", reader.readInt()));
+            player.send(new GuestRoomSearchResultComposer(roomList, player, 5, ""));
         } else {
             List<Room> roomList = RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(player.getDetails().getId()));
             if (roomList.size() > 0) {

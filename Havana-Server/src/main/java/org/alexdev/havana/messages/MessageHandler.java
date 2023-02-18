@@ -248,10 +248,10 @@ public class MessageHandler {
         registerEvent(19, new ADD_FAVORITE_ROOM());
         registerEvent(20, new DEL_FAVORITE_ROOM());
         // New navigator Flash
-        registerEvent(382, new GetPopularRoomTagsMessageEvent());
+//        registerEvent(382, new GetPopularRoomTagsMessageEvent());
         registerEvent(434, new SUSERF());
-        registerEvent(435, new GETFVRF());
-        registerEvent(436, new MyRoomHistorySearchMessageEvent());
+//        registerEvent(435, new GETFVRF());
+//        registerEvent(436, new MyRoomHistorySearchMessageEvent());
     }
 
     /**

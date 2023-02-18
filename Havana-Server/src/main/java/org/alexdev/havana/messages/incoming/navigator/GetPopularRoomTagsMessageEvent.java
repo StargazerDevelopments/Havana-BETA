@@ -12,7 +12,7 @@ import java.util.List;
 public class GetPopularRoomTagsMessageEvent implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        List<ImmutablePair<String, Integer>> tagList = RoomDao.getPopularTags();
-        player.send(new PopularRoomTagsResultComposer(tagList, reader.readInt()));
+//        List<ImmutablePair<String, Integer>> tagList = RoomDao.getPopularTags();
+//        player.send(new PopularRoomTagsResultComposer(tagList, reader.readInt()));
     }
 }
