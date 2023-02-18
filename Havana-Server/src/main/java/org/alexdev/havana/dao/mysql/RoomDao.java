@@ -5,6 +5,7 @@ import org.alexdev.havana.game.moderation.ChatMessage;
 import org.alexdev.havana.game.room.Room;
 import org.alexdev.havana.game.room.RoomData;
 import org.alexdev.havana.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -528,5 +529,37 @@ public class RoomDao {
                 row.getString("password"), row.getInt("visitors_now"), row.getInt("visitors_max"), row.getInt("rating"),
                 row.getString("icon_data"), row.getInt("group_id"), row.getBoolean("is_hidden"));
 
+    }
+
+    public static List<ImmutablePair<String, Integer>> getPopularTags() {
+        List<ImmutablePair<String, Integer>> tagList = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT tag, rooms.visitors_now AS visitors" +
+                    " FROM users_tags" +
+                    " JOIN rooms" +
+                    " ON rooms.id = users_tags.room_id" +
+                    " GROUP BY tag" +
+                    " ORDER BY rooms.visitors_now DESC;", sqlConnection);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                tagList.add(new ImmutablePair<>(resultSet.getString("tag"), resultSet.getInt("visitors")));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+            Storage.closeSilently(resultSet);
+        }
+
+        return tagList;
     }
 }
