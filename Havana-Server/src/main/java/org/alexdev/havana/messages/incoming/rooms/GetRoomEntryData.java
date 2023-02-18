@@ -130,7 +130,7 @@ public class GetRoomEntryData implements MessageEvent {
             player.getInventory().getView("new");
         }
 
-        player.send(new RoomEntryInfoMessageComposer(true, room.getId()));
+        player.send(new RoomEntryInfoMessageComposer(true, room.getId(), room.isOwner(player.getDetails().getId())));
         player.send(new GetGuestRoomResultComposer(room));
     }
 }

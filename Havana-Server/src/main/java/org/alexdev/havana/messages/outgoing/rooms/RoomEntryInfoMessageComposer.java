@@ -6,10 +6,12 @@ import org.alexdev.havana.server.netty.streams.NettyResponse;
 public class RoomEntryInfoMessageComposer extends MessageComposer {
     private final boolean privateRoom;
     private final int roomId;
+    private final boolean owner;
 
-    public RoomEntryInfoMessageComposer(boolean privateRoom, int roomId) {
+    public RoomEntryInfoMessageComposer(boolean privateRoom, int roomId, boolean owner) {
         this.privateRoom = privateRoom;
         this.roomId = roomId;
+        this.owner = owner;
     }
 
     @Override
@@ -17,7 +19,7 @@ public class RoomEntryInfoMessageComposer extends MessageComposer {
         // TODO: Publics
         response.writeBool(privateRoom);
         response.writeInt(roomId);
-        response.writeBool(false); // rights
+        response.writeBool(owner);
     }
 
     @Override

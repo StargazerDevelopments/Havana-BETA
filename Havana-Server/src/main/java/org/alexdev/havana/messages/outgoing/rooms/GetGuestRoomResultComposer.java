@@ -25,8 +25,6 @@ public class GetGuestRoomResultComposer extends MessageComposer {
         response.writeInt(0);
         response.writeBool(room.getCategory().hasAllowTrading());
         response.writeInt(room.getVotes().size()); // score
-        response.writeInt(room.getData().getCategoryId());
-        response.writeString("");
         response.writeInt(room.getData().getTags().size());
 
         for (String tag : room.getData().getTags())
@@ -34,8 +32,6 @@ public class GetGuestRoomResultComposer extends MessageComposer {
             response.writeString(tag);
         }
 
-        response.writeString("");
-        response.writeInt(0);
         response.write("HHIPAI");
         response.writeBool(true);
     }
