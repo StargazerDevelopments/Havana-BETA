@@ -4,6 +4,7 @@ import org.alexdev.havana.game.player.Player;
 import org.alexdev.havana.game.room.Room;
 import org.alexdev.havana.game.room.RoomManager;
 import org.alexdev.havana.messages.outgoing.navigator.FAVOURITEROOMRESULTS;
+import org.alexdev.havana.messages.outgoing.navigator.GuestRoomSearchResultComposer;
 import org.alexdev.havana.messages.types.MessageEvent;
 import org.alexdev.havana.server.netty.streams.NettyRequest;
 
@@ -18,6 +19,10 @@ public class GETFVRF implements MessageEvent {
         List<Room> favouritePublicRooms = favouriteRooms.stream().filter(Room::isPublicRoom).collect(Collectors.toList());
         List<Room> favouriteFlatRooms = favouriteRooms.stream().filter(room -> !room.isPublicRoom()).collect(Collectors.toList());
 
-        player.send(new FAVOURITEROOMRESULTS(player, favouritePublicRooms,  favouriteFlatRooms));
+        if (player.isFlashClient()) {
+            player.send(new GuestRoomSearchResultComposer(favouriteRooms, player, 6, "", reader.readInt()));
+        } else {
+            player.send(new FAVOURITEROOMRESULTS(player, favouritePublicRooms, favouriteFlatRooms));
+        }
     }
 }

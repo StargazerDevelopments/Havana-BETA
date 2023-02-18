@@ -249,6 +249,7 @@ public class MessageHandler {
         registerEvent(20, new DEL_FAVORITE_ROOM());
         // New navigator Flash
         registerEvent(434, new SUSERF());
+        registerEvent(435, new GETFVRF());
     }
 
     /**
@@ -607,6 +608,8 @@ public class MessageHandler {
                     }
                 }
             }
+        } else {
+            player.getLogger().info("Received ({}): {} / {}", "Unknown", message.getHeaderId(), message.getMessageBody());
         }
     }
 
