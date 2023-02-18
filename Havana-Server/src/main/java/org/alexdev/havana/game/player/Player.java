@@ -20,6 +20,8 @@ import org.alexdev.havana.game.messenger.Messenger;
 import org.alexdev.havana.game.player.guides.PlayerGuideManager;
 import org.alexdev.havana.game.player.statistics.PlayerStatistic;
 import org.alexdev.havana.game.player.statistics.PlayerStatisticManager;
+import org.alexdev.havana.game.room.Room;
+import org.alexdev.havana.game.room.RoomManager;
 import org.alexdev.havana.game.room.entities.RoomPlayer;
 import org.alexdev.havana.messages.outgoing.alerts.ALERT;
 import org.alexdev.havana.messages.outgoing.alerts.HOTEL_LOGOUT;
@@ -29,6 +31,7 @@ import org.alexdev.havana.messages.outgoing.effects.AVATAR_EFFECTS;
 import org.alexdev.havana.messages.outgoing.handshake.LOGIN;
 import org.alexdev.havana.messages.outgoing.handshake.RIGHTS;
 import org.alexdev.havana.messages.outgoing.handshake.UniqueIDMessageEvent;
+import org.alexdev.havana.messages.outgoing.navigator.FavouritesComposer;
 import org.alexdev.havana.messages.outgoing.openinghours.INFO_HOTEL_CLOSING;
 import org.alexdev.havana.messages.outgoing.user.settings.HELP_ITEMS;
 import org.alexdev.havana.messages.types.MessageComposer;
@@ -188,6 +191,12 @@ public class Player extends Entity {
         this.send(new RIGHTS(this.getFuserights()));
         this.send(new LOGIN());
         this.send(new AVATAR_EFFECTS(this.effects));
+
+        // TODO: Favourite rooms limit non-static
+        if (isFlashClient()) {
+            List<Room> favouriteRooms = RoomManager.getInstance().getFavouriteRooms(details.getId(), true);
+            this.send(new FavouritesComposer(50, favouriteRooms));
+        }
 
         if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
             String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");

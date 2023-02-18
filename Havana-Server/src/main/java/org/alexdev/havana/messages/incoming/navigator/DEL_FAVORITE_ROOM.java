@@ -3,6 +3,7 @@ package org.alexdev.havana.messages.incoming.navigator;
 import org.alexdev.havana.dao.mysql.RoomFavouritesDao;
 import org.alexdev.havana.game.player.Player;
 import org.alexdev.havana.game.room.RoomManager;
+import org.alexdev.havana.messages.outgoing.navigator.FavouriteChangedComposer;
 import org.alexdev.havana.messages.types.MessageEvent;
 import org.alexdev.havana.server.netty.streams.NettyRequest;
 
@@ -17,5 +18,6 @@ public class DEL_FAVORITE_ROOM implements MessageEvent {
         }
 
         RoomFavouritesDao.removeFavouriteRoom(player.getDetails().getId(), roomId);
+        player.send(new FavouriteChangedComposer(false, roomId));
     }
 }

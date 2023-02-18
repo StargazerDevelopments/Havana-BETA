@@ -4,6 +4,7 @@ import org.alexdev.havana.dao.mysql.RoomFavouritesDao;
 import org.alexdev.havana.game.player.Player;
 import org.alexdev.havana.game.room.Room;
 import org.alexdev.havana.game.room.RoomManager;
+import org.alexdev.havana.messages.outgoing.navigator.FavouriteChangedComposer;
 import org.alexdev.havana.messages.types.MessageEvent;
 import org.alexdev.havana.server.netty.streams.NettyRequest;
 
@@ -49,5 +50,6 @@ public class ADD_FAVORITE_ROOM implements MessageEvent {
         }
 
         RoomFavouritesDao.addFavouriteRoom(player.getDetails().getId(), roomId);
+        player.send(new FavouriteChangedComposer(true, roomId));
     }
 }
