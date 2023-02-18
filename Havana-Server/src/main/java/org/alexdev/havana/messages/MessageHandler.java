@@ -250,6 +250,7 @@ public class MessageHandler {
         // New navigator Flash
         registerEvent(434, new SUSERF());
         registerEvent(435, new GETFVRF());
+        registerEvent(436, new MyRoomHistorySearchMessageEvent());
     }
 
     /**
